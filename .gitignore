@@ -1,0 +1,14 @@
+node_modules
+dist
+dist2
+.DS_Store
+*.local
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Vite temp files left behind when the dev server is killed mid-run
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

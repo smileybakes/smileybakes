@@ -1,0 +1,3 @@
+# Netlify redirects. Copied into dist/ on build.
+# Serve the admin page at a clean /admin path (200 = rewrite, URL stays /admin).
+/admin    /admin.html    200

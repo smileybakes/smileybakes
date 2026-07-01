@@ -1,0 +1,46 @@
+# ===== Smiley Bakes — Apache / Hostinger config =====
+
+# --- SPA routing: send unknown paths to index.html ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  # Don't rewrite real files or directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  # Everything else -> index.html (client-side router takes over)
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# --- Gzip / Brotli compression ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/json
+  AddOutputFilterByType DEFLATE application/javascript text/javascript
+  AddOutputFilterByType DEFLATE image/svg+xml application/xml application/rss+xml
+</IfModule>
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css application/javascript image/svg+xml
+</IfModule>
+
+# --- Browser caching ---
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/png "access plus 6 months"
+  ExpiresByType image/webp "access plus 6 months"
+  ExpiresByType image/svg+xml "access plus 6 months"
+  ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+# Hashed JS/CSS assets are immutable
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2|jpg|png|webp|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
