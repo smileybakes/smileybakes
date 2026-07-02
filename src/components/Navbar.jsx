@@ -44,14 +44,19 @@ export default function Navbar() {
           </ul>
         </nav>
 
-        <button
-          className="nav-toggle"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          onClick={() => setOpen((o) => !o)}
-        >
-          {open ? '✕' : '☰'}
-        </button>
+        <div className="nav-actions">
+          <a href="#custom-cakes" className="nav-order" onClick={() => setOpen(false)}>
+            Order Online
+          </a>
+          <button
+            className="nav-toggle"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            onClick={() => setOpen((o) => !o)}
+          >
+            {open ? '✕' : '☰'}
+          </button>
+        </div>
       </div>
     </header>
   )
