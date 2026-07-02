@@ -214,6 +214,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 52%; height: 230px; object-fit: cover;
   border: 8px solid var(--cream);
 }
+.story-images .img-solo {
+  width: 100%; height: 420px; object-fit: cover; display: block;
+}
 .rating-badge {
   position: absolute; left: 64%; top: 38%;
   background: var(--ink); color: #fff;
@@ -417,61 +420,62 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ================= WHY CHOOSE US ================= */
 .why {
-  background: #16110d;
-  background-image: radial-gradient(rgba(201,162,75,.07) 1px, transparent 1px);
-  background-size: 26px 26px;
-  color: #fff;
-  padding: 110px 0 0;
+  background: var(--cream);
+  color: var(--ink);
+  padding: 96px 0;
 }
-.why-head { text-align: center; max-width: 640px; margin: 0 auto 70px; }
-.why-head .eyebrow.gold-only { display: inline-flex; flex-direction: column; align-items: center; gap: 12px; }
+.why-head { text-align: center; max-width: 620px; margin: 0 auto 56px; }
+.why-head .eyebrow.gold-only { display: inline-flex; flex-direction: column; align-items: center; gap: 12px; color: var(--gold-deep); }
 .why-head .eyebrow.gold-only::before { display: none; }
 .why-head .eyebrow.gold-only::after { content: ''; width: 54px; height: 1px; background: var(--gold); }
-.section-title.light { color: #f3ede2; margin: 22px 0 22px; }
-.section-title .accent-gold { font-style: italic; color: var(--gold); }
-.why-head p { color: rgba(255,255,255,.55); font-size: 16px; font-weight: 300; }
+.section-title.light { color: var(--ink); margin: 20px 0 18px; }
+.section-title .accent-gold { font-style: italic; color: var(--gold-deep); }
+.why-head p { color: var(--text-muted); font-size: 16px; font-weight: 300; }
 
+/* Minimalist: borderless cells separated only by hairlines. No boxes. */
 .why-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line);
 }
 .why-card {
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.015);
-  padding: 38px 36px 42px;
-  transition: border-color .25s, background .25s, transform .25s;
+  padding: 36px 32px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  transition: background .25s;
+  text-align: center;
 }
-.why-card:hover { border-color: rgba(201,162,75,.5); transform: translateY(-4px); }
-.why-card.highlight { border-color: var(--gold); background: rgba(201,162,75,.05); }
+.why-card:nth-child(3n) { border-right: none; }
+.why-card:hover { background: var(--cream-warm); }
+.why-card.highlight { background: transparent; }
 .why-icon {
-  width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
-  background: rgba(201,162,75,.12); color: var(--gold); margin-bottom: 30px;
+  width: auto; height: auto; display: flex; justify-content: center; background: none;
+  color: var(--gold-deep); margin-bottom: 16px;
 }
-.why-icon svg { width: 24px; height: 24px; }
-.why-card.highlight .why-icon { background: rgba(201,162,75,.22); }
+.why-icon svg { width: 26px; height: 26px; stroke-width: 1.4; }
+.why-card.highlight .why-icon { background: none; color: var(--gold-deep); }
 .why-card h3 {
-  font-family: var(--font-serif); font-size: 25px; font-weight: 600;
-  color: #f3ede2; margin-bottom: 14px;
+  font-family: var(--font-serif); font-size: 20px; font-weight: 500;
+  color: var(--ink); margin-bottom: 0;
 }
-.why-card p { color: rgba(255,255,255,.5); font-size: 14.5px; line-height: 1.65; font-weight: 300; }
+.why-card p { color: var(--text-muted); font-size: 14px; line-height: 1.6; font-weight: 300; margin-top: 8px; }
 
 .why-stats {
   display: grid; grid-template-columns: repeat(4, 1fr);
-  margin-top: 70px;
-  border-top: 1px solid rgba(255,255,255,.08);
+  margin-top: 64px;
 }
 .why-stat {
-  text-align: center; padding: 56px 20px;
-  border-left: 1px solid rgba(255,255,255,.08);
+  text-align: center; padding: 8px 20px;
+  border-left: 1px solid var(--line);
 }
 .why-stat:first-child { border-left: none; }
 .why-stat .num {
-  font-family: var(--font-serif); font-size: 44px; font-weight: 600; color: var(--gold);
+  font-family: var(--font-serif); font-size: 38px; font-weight: 500; color: var(--ink);
   line-height: 1; display: inline-flex; align-items: center; gap: 4px;
 }
-.why-stat .num .star { font-size: 30px; }
+.why-stat .num .star { font-size: 26px; color: var(--gold); }
 .why-stat .lbl {
   font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(255,255,255,.55); margin-top: 14px;
+  color: var(--text-muted); margin-top: 12px;
 }
 
 /* ================= REVIEWS ================= */
@@ -652,6 +656,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .story-grid { grid-template-columns: 1fr; gap: 90px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
   .why-grid { grid-template-columns: repeat(2, 1fr); }
+  .why-card:nth-child(3n) { border-right: 1px solid var(--line); }
+  .why-card:nth-child(2n) { border-right: none; }
   .why-stats { grid-template-columns: repeat(2, 1fr); }
   .why-stat:nth-child(3) { border-left: none; }
   .custom-grid { grid-template-columns: 1fr; gap: 50px; }
@@ -692,17 +698,72 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   }
   .nav-links a:active { background: rgba(0,0,0,.04); }
   .hero-stats { gap: 30px; flex-wrap: wrap; }
-  .features { grid-template-columns: 1fr; }
+
+  /* Tighten the Story section on mobile so it fits in ~one screen instead of
+     leaving a big white gap between the images and the copy. */
+  .story { padding: 48px 0; }
+  .story-grid { gap: 20px; }
+  .story-images .img-solo {
+    width: 100%; height: 180px;
+  }
+  .story-copy .section-title { margin: 10px 0 12px; }
+  .story-copy p { margin-bottom: 10px; font-size: 14.5px; }
+
+  .features { grid-template-columns: 1fr 1fr; gap: 12px 18px; margin: 16px 0 20px; }
   .grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 10px; }
-  .why-grid { grid-template-columns: 1fr; }
-  .why-stats { grid-template-columns: 1fr; }
-  .why-stat { border-left: none; border-top: 1px solid rgba(255,255,255,.08); padding: 36px 20px; }
+  .why { padding: 56px 0; }
+  .why-head { margin: 0 auto 32px; }
+  .why-head .section-title.light { font-size: 30px; margin: 14px 0 12px; }
+  .why-head p { font-size: 14px; }
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+  .why-card { padding: 22px 16px; }
+  .why-card:nth-child(3n) { border-right: 1px solid var(--line); }
+  .why-card:nth-child(2n) { border-right: none; }
+  .why-icon { margin-bottom: 12px; }
+  .why-icon svg { width: 22px; height: 22px; }
+  .why-card h3 { font-size: 16px; }
+  .why-stats { grid-template-columns: repeat(2, 1fr); margin-top: 40px; }
+  .why-stat { border-left: none; border-top: 1px solid var(--line); padding: 22px 14px; }
+  .why-stat:nth-child(2) { border-left: 1px solid var(--line); }
+  .why-stat .num { font-size: 30px; }
   .field-row { grid-template-columns: 1fr; gap: 0; }
   .inquiry-card { padding: 30px 22px; }
   .reviews-grid { grid-template-columns: 1fr; }
   .ci-hours .hr { min-width: 0; }
+
+  /* Compact the Contact section so it fits in roughly one mobile screen:
+     tighter spacing, two-up address rows, and a short map. */
+  .contact { padding: 48px 0; }
+  .contact-head { margin: 0 auto 28px; }
+  .contact-head .section-title { margin: 12px 0 12px; }
+  .contact-head p { font-size: 14px; }
+  .contact-grid { gap: 20px; }
+  /* Two even columns with aligned rows: the two grid rows share a baseline
+     so short entries (Email/Open) don't drift out of line. */
+  .contact-info {
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: start; gap: 20px;
+  }
+  .ci-row { gap: 12px; }
+  .ci-icon { width: 34px; height: 34px; flex: none; }
+  .ci-icon svg { width: 17px; height: 17px; }
+  .ci-row h4 { font-size: 14px; margin-bottom: 3px; }
+  .ci-row p { font-size: 13px; word-break: break-word; }
+  /* Follow spans full width beneath the four info cells. */
+  .follow { grid-column: 1 / -1; margin-top: 4px; }
+  .follow h4 { margin: 0 0 10px; }
+  .social { width: 40px; height: 40px; }
+
+  /* Map tall enough to contain its overlay card without overflow. */
+  .contact-map, .contact-map iframe { min-height: 260px; }
+  .map-card {
+    position: static; box-shadow: none; border-top: 1px solid var(--line);
+    padding: 16px 18px; max-width: none;
+  }
+  .map-card h4 { font-size: 16px; margin-bottom: 4px; }
+  .map-card p { font-size: 12.5px; margin-bottom: 8px; }
 
   /* Compact, single-row scrollable filter bar on mobile so it doesn't
      stack into a tall block that covers the products below it. */

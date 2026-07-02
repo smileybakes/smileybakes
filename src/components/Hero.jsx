@@ -7,8 +7,7 @@ const STATS = [
   { num: '500+', lbl: 'Custom Cakes Yearly' },
 ]
 
-const HERO_IMG =
-  'https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg?auto=compress&cs=tinysrgb&w=1920&q=85'
+const HERO_IMG = '/hero.avif'
 
 export default function Hero() {
   const containerRef = useRef(null)

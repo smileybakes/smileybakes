@@ -87,12 +87,12 @@ export default function CustomOrder() {
             <br />
             <span className="accent">Baked in Bulk</span>
           </h2>
-          <p className="custom-lead">
+          {/* <p className="custom-lead">
             Hosting an event or stocking up for a celebration? Order our crisp
             Varkey and freshly baked cookies in bulk. Tell us what you need, and
             our team will prepare your order with the same care that goes into
             every batch.
-          </p>
+          </p> */}
 
           <div className="steps">
             {STEPS.map((s) => (
@@ -106,11 +106,11 @@ export default function CustomOrder() {
             ))}
           </div>
 
-          <img
+          {/* <img
             className="custom-img"
             src="https://t4.ftcdn.net/jpg/07/28/56/39/360_F_728563972_CCPevJI0rJSRjFYW10PF7CYdIjh2tCdI.jpg"
             alt="Assortment of freshly baked cookies"
-          />
+          /> */}
         </div>
 
         {/* Right — form card */}

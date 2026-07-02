@@ -88,17 +88,17 @@ export default function Story() {
     >
       <div className="container story-grid">
         <div className="story-images">
-          <motion.img
+          {/* <motion.img
             className="img-main"
             src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=80"
             alt="Plated dessert"
             variants={cakeImageVariant}
             whileHover={{ scale: 1.03 }}
             transition={{ duration: 0.4 }}
-          />
+          /> */}
           <motion.img
-            className="img-small"
-            src="https://i0.wp.com/nativespecial.com/in/wp-content/uploads/sites/3/2019/11/Ooty-Varkey-GP-1.jpg?fit=800%2C800&ssl=1"
+            className="img-solo"
+            src="/teawithvarkey.png"
             alt="Assorted pastries"
             variants={breadImageVariant}
             whileHover={{ scale: 1.03 }}
@@ -142,9 +142,9 @@ export default function Story() {
             a sanctuary where traditional techniques meet modern artistry.
           </motion.p>
           <motion.p variants={paragraphVariant}>
-            From the moment you walk through our doors, you're welcomed by the
+            {/* From the moment you walk through our doors, you're welcomed by the
             warm aroma of freshly baked bread and the sight of meticulously
-            crafted pastries.
+            crafted pastries. */}
           </motion.p>
 
           <motion.div className="features" variants={featuresVariant}>
@@ -154,8 +154,8 @@ export default function Story() {
                 key={f.title}
                 variants={featureVariant}
               >
-                <h4>{f.title}</h4>
-                <p>{f.desc}</p>
+                <h5>{f.title}</h5>
+                {/* <p>{f.desc}</p> */}
               </motion.div>
             ))}
           </motion.div>

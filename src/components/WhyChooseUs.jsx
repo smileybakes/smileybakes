@@ -117,7 +117,7 @@ export default function WhyChooseUs() {
             >
               <div className="why-icon">{ICONS[f.icon]}</div>
               <h3>{f.title}</h3>
-              <p>{f.desc}</p>
+              {/* <p>{f.desc}</p> */}
             </motion.article>
           ))}
         </motion.div>
