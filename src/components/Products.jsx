@@ -39,6 +39,25 @@ export default function Products() {
     }
   }, [])
 
+  // Warm the browser cache for every product image as soon as the list is
+  // known, so the images are already downloaded by the time the user scrolls
+  // to this section — no blank cards on arrival.
+  useEffect(() => {
+    const urls = new Set()
+    for (const p of products) urls.add(p.img || PLACEHOLDER)
+    const imgs = []
+    for (const url of urls) {
+      const img = new Image()
+      img.decoding = 'async'
+      img.src = url
+      imgs.push(img)
+    }
+    return () => {
+      // Drop references so the preloaders can be garbage-collected.
+      for (const img of imgs) img.src = ''
+    }
+  }, [products])
+
   // Build the category filter list from whatever products we actually have,
   // preserving the curated order from the static list and appending any new
   // categories the admin may have introduced.
@@ -264,11 +283,18 @@ function ProductCard({ p, index = 0, animateOnMount = false }) {
       <div className="card-media">
         {p.badge && <span className="badge">{p.badge}</span>}
         <motion.img
+          ref={(el) => {
+            // If the image was already cached, onLoad may not fire — reveal it now.
+            if (el && el.complete && el.naturalWidth > 0) el.classList.add('loaded')
+          }}
           src={p.img || PLACEHOLDER}
           alt={p.name}
-          loading="lazy"
+          loading="eager"
+          decoding="async"
+          onLoad={(e) => e.currentTarget.classList.add('loaded')}
           onError={(e) => {
             if (e.currentTarget.src !== PLACEHOLDER) e.currentTarget.src = PLACEHOLDER
+            else e.currentTarget.classList.add('loaded')
           }}
           whileHover={{ scale: 1.06 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}

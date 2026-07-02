@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const LINKS = [
   { label: 'About', href: '#about' },
@@ -11,8 +11,18 @@ const LINKS = [
 export default function Navbar() {
   const [open, setOpen] = useState(false)
 
+  // Transparent over the hero photo; turns into the solid cream bar once the
+  // user scrolls past the top.
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    onScroll() // set initial state (e.g. reloaded mid-page)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
-    <header className="nav">
+    <header className={`nav ${scrolled || open ? 'scrolled' : ''}`}>
       <div className="container nav-inner">
         <a href="#top" className="logo" onClick={() => setOpen(false)}>
           <img className="logo-img" src="/logo.png" alt="Smiley Bakes logo" />

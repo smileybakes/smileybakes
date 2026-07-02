@@ -85,10 +85,27 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* ================= NAVBAR ================= */
 .nav {
   position: sticky; top: 0; z-index: 50;
+  /* Transparent over the hero, with a soft top-down gradient so the white
+     links stay legible against the photo. */
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.nav::before {
+  content: '';
+  position: absolute; inset: 0; bottom: auto; height: 140px;
+  background: linear-gradient(180deg, rgba(15,12,11,.55) 0%, rgba(15,12,11,0) 100%);
+  pointer-events: none;
+  opacity: 1; transition: opacity .3s ease;
+  z-index: -1;
+}
+/* Solid cream state once scrolled (or when the mobile menu is open). */
+.nav.scrolled {
   background: rgba(250,246,239,.92);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
+  border-bottom-color: var(--line);
 }
+.nav.scrolled::before { opacity: 0; }
 /* Positioning context for the mobile dropdown menu. */
 .nav-inner { position: relative; }
 .nav-inner {
@@ -101,20 +118,28 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .logo .logo-name {
   font-family: var(--font-serif);
   font-size: 27px; font-weight: 600; letter-spacing: 0.12em;
-  color: var(--ink);
+  color: #fff; transition: color .3s ease;
 }
 .logo .logo-sub {
-  font-size: 10px; letter-spacing: 0.42em; color: var(--gold-deep);
+  font-size: 10px; letter-spacing: 0.42em; color: var(--gold);
   text-transform: uppercase; font-weight: 600; margin-top: 1px;
+  transition: color .3s ease;
 }
 .nav-links { display: flex; gap: 34px; list-style: none; }
 .nav-links a {
   font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase;
-  font-weight: 500; color: var(--ink); transition: color .2s;
+  font-weight: 500; color: #fff; transition: color .2s;
 }
-.nav-links a:hover { color: var(--gold-deep); }
+.nav-links a:hover { color: var(--gold); }
 .nav-cta { padding: 13px 24px; font-size: 12px; }
-.nav-toggle { display: none; font-size: 24px; color: var(--ink); }
+.nav-toggle { display: none; font-size: 24px; color: #fff; transition: color .3s ease; }
+
+/* Scrolled (solid cream) state: switch text back to dark ink. */
+.nav.scrolled .logo .logo-name { color: var(--ink); }
+.nav.scrolled .logo .logo-sub { color: var(--gold-deep); }
+.nav.scrolled .nav-links a { color: var(--ink); }
+.nav.scrolled .nav-links a:hover { color: var(--gold-deep); }
+.nav.scrolled .nav-toggle { color: var(--ink); }
 
 /* ================= HERO (scroll-zoom) ================= */
 /* Tall track gives us scroll distance; the sticky child stays pinned. */
@@ -144,8 +169,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero-overlay {
   position: absolute;
   inset: 0;
+  /* Stronger on the left (where the text sits), plus a slight bottom fade
+     so the stats stay readable over the busy foreground. */
   background:
-    linear-gradient(90deg, rgba(15,12,11,.9) 0%, rgba(15,12,11,.55) 55%, rgba(15,12,11,.3) 100%);
+    linear-gradient(90deg, rgba(15,12,11,.82) 0%, rgba(15,12,11,.5) 42%, rgba(15,12,11,.12) 72%, rgba(15,12,11,0) 100%),
+    linear-gradient(0deg, rgba(15,12,11,.35) 0%, rgba(15,12,11,0) 30%);
   z-index: 1;
 }
 .hero-inner {
@@ -155,26 +183,28 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   will-change: transform, opacity;
 }
 .hero-scroll .eyebrow { color: var(--gold); margin-bottom: 24px; }
+.hero-scroll .eyebrow.centered { justify-content: flex-start; }
 .hero { /* legacy alias kept for any other references */ position: relative; }
 .hero-content {
-  max-width: 960px; margin: 0 auto; padding: 90px 0; text-align: center;
+  max-width: 620px; margin: 0; padding: 90px 0; text-align: left;
+  text-shadow: 0 2px 18px rgba(15,12,11,.45);
 }
 .hero h1 {
   font-family: var(--font-serif);
   font-weight: 500;
-  font-size: clamp(46px, 7.5vw, 92px);
-  line-height: 1.02;
+  font-size: clamp(46px, 6vw, 78px);
+  line-height: 1.03;
   letter-spacing: -0.015em;
 }
 .hero h1 .accent { font-style: italic; color: var(--rose-soft); }
 .hero p {
-  margin: 26px auto 38px;
-  font-size: 17px; max-width: 540px;
-  color: rgba(255,255,255,.82); font-weight: 300;
+  margin: 24px 0 38px;
+  font-size: 17px; max-width: 480px;
+  color: rgba(255,255,255,.88); font-weight: 300;
 }
-.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: flex-start; }
 .hero-stats {
-  display: flex; gap: 70px; margin-top: 60px; justify-content: center;
+  display: flex; gap: 54px; margin-top: 54px; justify-content: flex-start;
 }
 .stat { text-align: center; }
 .stat .num {
@@ -321,8 +351,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: box-shadow .25s ease;
 }
 .card:hover { box-shadow: 0 20px 40px rgba(23,20,19,.10); }
-.card-media { position: relative; overflow: hidden; height: 220px; }
-.card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-media { position: relative; overflow: hidden; height: 220px; background: var(--cream-warm); }
+.card-media img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  opacity: 0; transition: opacity .4s ease;
+}
+.card-media img.loaded { opacity: 1; }
 .badge {
   position: absolute; top: 12px; left: 12px;
   background: var(--ink); color: var(--gold);
@@ -697,6 +731,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     font-size: 13px;
   }
   .nav-links a:active { background: rgba(0,0,0,.04); }
+  /* On phones the photo is cropped tighter, so use an even bottom-weighted
+     overlay and let the left-aligned text use the full width. */
+  .hero-overlay {
+    background:
+      linear-gradient(180deg, rgba(15,12,11,.4) 0%, rgba(15,12,11,.35) 40%, rgba(15,12,11,.72) 100%);
+  }
+  .hero-content { max-width: 100%; padding: 70px 0; }
   .hero-stats { gap: 30px; flex-wrap: wrap; }
 
   /* Tighten the Story section on mobile so it fits in ~one screen instead of
@@ -788,4 +829,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   }
 
   .products-scroll { margin-top: 16px; }
+
+  /* Mobile: let the photo dominate the card, keep the text block minimal. */
+  .slide .card { max-width: 460px; }
+  .card-media { height: 340px; }
+  .card-body { padding: 14px 18px 16px; }
+  .card-title { font-size: 21px; margin: 3px 0 0; }
+  .card-desc { min-height: 0; margin-top: 6px; }
+  .card-price { margin-top: 8px; font-size: 18px; }
 }
