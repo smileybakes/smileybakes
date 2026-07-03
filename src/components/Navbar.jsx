@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 
 const LINKS = [
-  { label: 'About', href: '#about' },
-  { label: 'Menu', href: '#products' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Order Online', href: '#custom-cakes' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'About', href: '/#about' },
+  { label: 'Menu', href: '/#products' },
+  { label: 'Products', href: '/products' },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Order Online', href: '/#custom-cakes' },
+  { label: 'Contact', href: '/#contact' },
 ]
 
 export default function Navbar() {
@@ -24,7 +25,7 @@ export default function Navbar() {
   return (
     <header className={`nav ${scrolled || open ? 'scrolled' : ''}`}>
       <div className="container nav-inner">
-        <a href="#top" className="logo" onClick={() => setOpen(false)}>
+        <a href="/#top" className="logo" onClick={() => setOpen(false)}>
           <img className="logo-img" src="/logo.png" alt="Smiley Bakes logo" />
           <div className="logo-text">
             <div className="logo-name">SMILEY</div>
@@ -45,7 +46,7 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-actions">
-          <a href="#custom-cakes" className="nav-order" onClick={() => setOpen(false)}>
+          <a href="/#custom-cakes" className="nav-order" onClick={() => setOpen(false)}>
             Order Online
           </a>
           <button

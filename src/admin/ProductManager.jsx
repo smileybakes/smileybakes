@@ -6,12 +6,13 @@ import {
   formatPrice,
 } from '../data/products.js'
 import ProductForm from './ProductForm.jsx'
+import { AdminTabs } from './Admin.jsx'
 
 // Known categories (minus the synthetic 'All') seed the category dropdown; the
 // admin can still type a new one in the form.
 const SEED_CATEGORIES = STATIC_CATEGORIES.filter((c) => c !== 'All')
 
-export default function ProductManager({ session }) {
+export default function ProductManager({ session, tabProps }) {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -90,6 +91,7 @@ export default function ProductManager({ session }) {
             <h1>Product Manager</h1>
             <span className="admin-user">{session.user?.email}</span>
           </div>
+          {tabProps && <AdminTabs {...tabProps} />}
           <div className="app-header-actions">
             <button className="btn-primary" onClick={() => setEditing({})}>
               + Add product

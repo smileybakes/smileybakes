@@ -4,6 +4,10 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+  # Clean URLs for the multi-page bundles -> their .html entry points
+  RewriteRule ^products/?$ products.html [L]
+  RewriteRule ^gallery/?$  gallery.html  [L]
+  RewriteRule ^admin/?$    admin.html    [L]
   # Don't rewrite real files or directories
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

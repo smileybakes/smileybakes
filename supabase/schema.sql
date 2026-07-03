@@ -104,3 +104,53 @@ create policy "authenticated can delete product images"
   on storage.objects for delete
   to authenticated
   using (bucket_id = 'product-images');
+
+
+-- ----------------------------------------------------------------------------
+-- 4. Gallery images table  (bento-grid gallery shown at /gallery)
+-- ----------------------------------------------------------------------------
+-- Separate from products. Reuses the 'product-images' bucket above for photos.
+create table if not exists public.gallery_images (
+  id          bigint generated always as identity primary key,
+  img         text,                            -- image URL (Supabase Storage or external)
+  caption     text,                            -- optional alt / hover caption
+  size        text not null default 'small'    -- bento tile size
+                check (size in ('small', 'wide', 'tall', 'large')),
+  status      text not null default 'active'   -- 'active' = shown publicly, 'hidden' = not shown
+                check (status in ('active', 'hidden')),
+  sort_order  int  not null default 0,         -- controls grid flow order
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists gallery_sort_idx on public.gallery_images (sort_order, id);
+
+alter table public.gallery_images enable row level security;
+
+drop policy if exists "public can read active gallery" on public.gallery_images;
+create policy "public can read active gallery"
+  on public.gallery_images for select
+  using (status = 'active');
+
+drop policy if exists "authenticated can read all gallery" on public.gallery_images;
+create policy "authenticated can read all gallery"
+  on public.gallery_images for select
+  to authenticated
+  using (true);
+
+drop policy if exists "authenticated can insert gallery" on public.gallery_images;
+create policy "authenticated can insert gallery"
+  on public.gallery_images for insert
+  to authenticated
+  with check (true);
+
+drop policy if exists "authenticated can update gallery" on public.gallery_images;
+create policy "authenticated can update gallery"
+  on public.gallery_images for update
+  to authenticated
+  using (true) with check (true);
+
+drop policy if exists "authenticated can delete gallery" on public.gallery_images;
+create policy "authenticated can delete gallery"
+  on public.gallery_images for delete
+  to authenticated
+  using (true);

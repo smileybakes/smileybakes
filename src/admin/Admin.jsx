@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { supabase, isConfigured } from '../lib/supabase.js'
 import Login from './Login.jsx'
 import ProductManager from './ProductManager.jsx'
+import GalleryManager from './GalleryManager.jsx'
 
 // Top-level admin app: shows the login screen until a user is authenticated,
 // then the product manager. All write access is gated by Supabase Auth + RLS.
 export default function Admin() {
   const [session, setSession] = useState(null)
   const [ready, setReady] = useState(false)
+  const [tab, setTab] = useState('products') // 'products' | 'gallery'
 
   useEffect(() => {
     if (!isConfigured) {
@@ -49,5 +51,37 @@ export default function Admin() {
     )
   }
 
-  return session ? <ProductManager session={session} /> : <Login />
+  if (!session) return <Login />
+
+  const tabProps = { tab, setTab }
+  return tab === 'gallery' ? (
+    <GalleryManager session={session} tabProps={tabProps} />
+  ) : (
+    <ProductManager session={session} tabProps={tabProps} />
+  )
+}
+
+// Shared segmented tab control shown in each manager's header. Lets the admin
+// switch between managing products and managing the gallery.
+export function AdminTabs({ tab, setTab }) {
+  return (
+    <div className="admin-tabs" role="tablist" aria-label="Admin sections">
+      <button
+        role="tab"
+        aria-selected={tab === 'products'}
+        className={`admin-tab ${tab === 'products' ? 'active' : ''}`}
+        onClick={() => setTab('products')}
+      >
+        Products
+      </button>
+      <button
+        role="tab"
+        aria-selected={tab === 'gallery'}
+        className={`admin-tab ${tab === 'gallery' ? 'active' : ''}`}
+        onClick={() => setTab('gallery')}
+      >
+        Gallery
+      </button>
+    </div>
+  )
 }
