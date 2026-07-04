@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { renameSync, rmdirSync, existsSync } from 'fs'
+import { renameSync, mkdirSync, rmdirSync, existsSync } from 'fs'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -14,9 +14,17 @@ function flattenPages() {
       const src = resolve(dist, 'pages')
       if (!existsSync(src)) return
       for (const name of ['products', 'gallery', 'admin']) {
-        const from = resolve(src, name)
-        const to = resolve(dist, name)
-        if (existsSync(from)) renameSync(from, to)
+        const fromHtml = resolve(src, name, 'index.html')
+        const toDir = resolve(dist, name)
+        if (!existsSync(fromHtml)) continue
+        // Move just the built index.html up to dist/<name>/index.html. We move
+        // the file (not the whole dir) because dist/<name>/ may already hold
+        // static assets copied from public/<name>/ (e.g. product images), and
+        // renaming the directory over them fails with ENOTEMPTY.
+        if (!existsSync(toDir)) mkdirSync(toDir, { recursive: true })
+        renameSync(fromHtml, resolve(toDir, 'index.html'))
+        // Drop the now-empty dist/pages/<name> directory.
+        try { rmdirSync(resolve(src, name)) } catch { /* ignore */ }
       }
       // Remove the now-empty dist/pages directory.
       try {

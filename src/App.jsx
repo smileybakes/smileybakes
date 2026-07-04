@@ -3,6 +3,7 @@ import Hero from './components/Hero.jsx'
 import Story from './components/Story.jsx'
 import WhyChooseUs from './components/WhyChooseUs.jsx'
 import Products from './components/Products.jsx'
+import OotySpecials from './components/OotySpecials.jsx'
 import CustomOrder from './components/CustomOrder.jsx'
 import Testimonials from './components/Testimonials.jsx'
 import Contact from './components/Contact.jsx'
@@ -16,6 +17,7 @@ export default function App() {
         <Hero />
         <Story />
         <Products />
+        <OotySpecials />
         <WhyChooseUs />
         <CustomOrder />
         <Testimonials />

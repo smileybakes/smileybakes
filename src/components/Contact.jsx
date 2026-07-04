@@ -1,5 +1,16 @@
 const ADDRESS = 'Rose Cottage, Ooty Main Road, Kotagiri, Tamil Nadu'
-const MAP_Q = encodeURIComponent('Smiley Bakes, Ooty Main Road, Kotagiri, Tamil Nadu')
+
+// Exact location of the verified Google Business listing (from the shared
+// Maps pin). Using precise coordinates means the embed can never drift the way
+// a fuzzy text-address search does.
+const LAT = 11.4231422
+const LNG = 76.860337
+// Embed pinned to the exact coordinates.
+const MAP_SRC = `https://maps.google.com/maps?q=${LAT},${LNG}&z=17&output=embed`
+// "Get Directions" points at the exact business: coordinates guarantee the
+// right spot, and the place_id (from the shared pin) resolves to the listing.
+const DIRECTIONS_URL =
+  `https://www.google.com/maps/search/?api=1&query=${LAT}%2C${LNG}&query_place_id=0x3ba8c19d68a0a68f:0x5cde8300e8be733e`
 
 const Icon = {
   pin: (
@@ -68,7 +79,7 @@ export default function Contact() {
               <div className="ci-icon">{Icon.mail}</div>
               <div>
                 <h4>Email</h4>
-                <p><a href="mailto:hello@smileybakes.com">hello@smileybakes.com</a></p>
+                <p><a href="mailto:smileybakes.43@gmail.com">smileybakes.43@gmail.com</a></p>
               </div>
             </div>
 
@@ -85,8 +96,8 @@ export default function Contact() {
             <div className="follow">
               <h4>Follow Us</h4>
               <div className="socials">
-                <a className="social" href="#" aria-label="Instagram">{Icon.instagram}</a>
-                <a className="social" href="#" aria-label="Facebook">{Icon.facebook}</a>
+                <a className="social" href="https://www.instagram.com/smileybakes_tn43?igsh=YnB1MDgzZ3Rza3Rt" target="_blank" rel="noreferrer" aria-label="Instagram">{Icon.instagram}</a>
+                {/* <a className="social" href="#" aria-label="Facebook">{Icon.facebook}</a> */}
               </div>
             </div>
           </div>
@@ -94,18 +105,14 @@ export default function Contact() {
           <div className="contact-map">
             <iframe
               title="Smiley Bakes location"
-              src={`https://maps.google.com/maps?q=${MAP_Q}&z=15&output=embed`}
+              src={MAP_SRC}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
             <div className="map-card">
               <h4>SMILEY BAKES</h4>
               <p>{ADDRESS}</p>
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${MAP_Q}`}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href={DIRECTIONS_URL} target="_blank" rel="noreferrer">
                 Get Directions →
               </a>
             </div>

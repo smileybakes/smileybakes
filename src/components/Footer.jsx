@@ -38,7 +38,7 @@ export default function Footer() {
             <ul>
               <li><a href="tel:+916382102558">+91 63821 02558</a></li>
               <li><a href="tel:+919843800369">+91 98438 00369</a></li>
-              <li><a href="mailto:hello@smileybakes.com">hello@smileybakes.com</a></li>
+              <li><a href="mailto:smileybakes.43@gmail.com">smileybakes.43@gmail.com</a></li>
             </ul>
           </div>
         </div>
