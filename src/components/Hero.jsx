@@ -24,7 +24,7 @@ const StatIcon = {
 const STATS = [
   { icon: 'customers', num: '1000+', lbl: 'Happy Customers' },
   { icon: 'star', num: '4.9', lbl: 'Google Rating' },
-  { icon: 'wheat', num: 'Since 1973', lbl: 'Baking Happiness' },
+  // { icon: 'wheat', num: 'Since 1973', lbl: 'Baking Happiness' },
 ]
 
 export default function Hero() {

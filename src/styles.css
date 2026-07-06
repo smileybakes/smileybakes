@@ -170,7 +170,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('/hero1.png');
+  background-image: url('/hero.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -301,22 +301,91 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .products-scroll { margin-top: 22px; }
 
+/* ===== "menu" homepage section (light / cream) ===== */
+.products-dark {
+  padding: 104px 0 100px;
+  background:
+    radial-gradient(1100px 600px at 50% -8%, rgba(201,162,75,.08), transparent 60%),
+    var(--cream);
+}
+.products-dark .products-head { max-width: 680px; margin: 0 auto; }
+.products-dark .section-title.light { color: var(--ink); }
+.products-dark .section-title .accent-gold { color: var(--gold-deep); }
+.products-dark .products-head p { color: var(--text-muted); }
+
+/* Search bar */
+.menu-search {
+  display: flex; align-items: center; gap: 12px;
+  max-width: 640px; margin: 40px auto 0;
+  padding: 0 24px; height: 60px;
+  border-radius: 999px;
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(23,20,19,.06);
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+.menu-search:focus-within { border-color: var(--gold); box-shadow: 0 10px 28px rgba(23,20,19,.10); }
+.menu-search svg { width: 20px; height: 20px; color: var(--text-muted); flex: none; }
+.menu-search input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--font-sans); font-size: 16px; color: var(--ink);
+}
+.menu-search input::placeholder { color: var(--text-muted); }
+/* Hide the native search clear button for a cleaner look. */
+.menu-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+/* Category filter pills — wrap onto multiple centered rows. */
+.menu-filters {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
+  margin: 28px auto 44px; max-width: 780px;
+}
+.menu-filter {
+  padding: 12px 26px; border-radius: 999px;
+  font-size: 15px; font-weight: 500; color: var(--ink);
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 8px rgba(23,20,19,.04);
+  transition: all .25s ease;
+}
+.menu-filter:hover { border-color: var(--gold); transform: translateY(-1px); }
+.menu-filter.active {
+  color: #fff; font-weight: 600;
+  background: #6b4a2b; border-color: #6b4a2b;
+  box-shadow: 0 6px 16px rgba(107,74,43,.28);
+}
+
+/* Static card grid */
+.menu-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+}
+.menu-empty { text-align: center; color: var(--text-muted); padding: 48px 0; font-size: 16px; }
+.menu-more { display: flex; justify-content: center; margin-top: 48px; }
+.menu-more .btn { border-radius: 999px; }
+
 /* ===== /products page: clean card grid (no carousel) ===== */
 .products-page { padding-top: 130px; } /* clear the fixed navbar */
 
-/* Float the category filters at the top while the grid scrolls. Scoped to the
-   products page only, so the homepage carousel filters are unaffected. */
-.products-page .filters {
+/* Float ONLY the search bar at the top while the grid (and filters) scroll.
+   Scoped to the products page. The wrapper is a full-width sticky band with a
+   cream backdrop (negative side margins bleed it to the container edges so
+   cards passing underneath are hidden); the search pill stays centered inside. */
+.products-page .menu-search-bar {
   position: sticky;
   top: 78px; /* sits just below the 78px navbar */
   z-index: 40;
-  margin-left: -28px;
-  margin-right: -28px;
-  padding-left: 28px;
-  padding-right: 28px;
+  margin: 0 -28px;
+  padding: 20px 28px 16px;
+  background: var(--cream);
 }
+.products-page .menu-search-bar .menu-search { margin: 0 auto; }
+
+/* Filters scroll normally (not sticky). */
+.products-page .menu-filters { margin: 20px auto 28px; }
+
 @media (max-width: 720px) {
-  .products-page .filters { top: 44px; }
+  .products-page { padding-top: 20px; }
+  /* Stick just below the 64px mobile navbar so the search top isn't clipped. */
+  .products-page .menu-search-bar { top: 64px; padding: 14px 28px 12px; }
 }
 
 .product-grid {
@@ -326,7 +395,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   margin-top: 28px;
 }
 @media (max-width: 720px) {
-  .products-page { padding-top: 20px; }
   .product-grid { grid-template-columns: 1fr; gap: 18px; } /* one product per row on mobile */
 }
 
@@ -481,29 +549,61 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .grid {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;
 }
+/* Light "menu" card: image fills the top with rounded corners and two pill
+   badges, then a white body with the name + price on one row and a short
+   description below. */
 .card {
-  background: var(--cream-card);
+  background: #fffdf9;
   border: 1px solid var(--line);
-  transition: box-shadow .25s ease;
+  border-radius: 26px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(23,20,19,.08);
+  transition: transform .3s ease, box-shadow .3s ease;
 }
-.card:hover { box-shadow: 0 20px 40px rgba(23,20,19,.10); }
-.card-media { position: relative; overflow: hidden; height: 220px; background: var(--cream-warm); }
+.card:hover { box-shadow: 0 22px 46px rgba(23,20,19,.14); }
+.card-media {
+  position: relative; overflow: hidden; height: 240px;
+  margin: 12px 12px 0; border-radius: 18px;
+  background: var(--cream-warm);
+}
 .card-media img {
   width: 100%; height: 100%; object-fit: cover; display: block;
   opacity: 0; transition: opacity .4s ease;
 }
 .card-media img.loaded { opacity: 1; }
+/* Pill badges on the image. "Popular"-type badge sits top-left (light with a
+   gold star); the category pill sits top-right (dark brown). */
 .badge {
-  position: absolute; top: 12px; left: 12px;
-  background: var(--ink); color: var(--gold);
-  font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600;
-  padding: 6px 11px;
+  position: absolute; top: 16px;
+  font-size: 13px; letter-spacing: 0.01em; font-weight: 600;
+  padding: 8px 16px; border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(23,20,19,.16);
 }
-.card-body { padding: 20px 20px 22px; }
-.card-cat { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-deep); font-weight: 600; }
-.card-title { font-family: var(--font-serif); font-size: 23px; font-weight: 600; color: var(--ink); margin: 5px 0 8px; }
-.card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; min-height: 38px; }
-.card-price { margin-top: 10px; font-family: var(--font-serif); font-size: 20px; font-weight: 600; color: var(--gold-deep); }
+.badge-right {
+  right: 16px;
+  background: #6b4a2b; color: #f6efe2;
+}
+.badge-left {
+  left: 16px;
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(250,246,239,.92); color: var(--ink);
+  backdrop-filter: blur(6px);
+}
+.badge-left::before { content: '★'; color: var(--gold-deep); font-size: 12px; }
+.card-body { padding: 22px 22px 24px; }
+.card-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+}
+.card-title {
+  font-family: var(--font-serif); font-size: 27px; font-weight: 600;
+  color: var(--ink); line-height: 1.12; margin: 0;
+}
+.card-price {
+  flex: none;
+  font-family: var(--font-serif); font-size: 25px; font-weight: 600;
+  color: var(--gold-deep);
+}
+.card-desc { font-size: 14.5px; color: var(--text-muted); line-height: 1.55; margin-top: 10px; }
 .card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
 .price { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--ink); }
 .add-btn {
@@ -582,6 +682,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .pill:hover { border-color: var(--gold); }
 .pill.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pills-hint { font-size: 0.85rem; color: #888; margin: 4px 0 0; font-style: italic; }
 
 .inquiry-submit { width: 100%; justify-content: center; margin-top: 6px; padding: 13px; font-size: 12px; }
 .inquiry-foot {
@@ -1015,11 +1116,24 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
   /* Mobile: let the photo dominate the card, keep the text block minimal. */
   .slide .card { max-width: 460px; }
-  .card-media { height: 340px; }
-  .card-body { padding: 14px 18px 16px; }
-  .card-title { font-size: 21px; margin: 3px 0 0; }
-  .card-desc { min-height: 0; margin-top: 6px; }
-  .card-price { margin-top: 8px; font-size: 18px; }
+  .card-media { height: 300px; }
+  .card-body { padding: 16px 18px 18px; }
+  .card-title { font-size: 22px; }
+  .card-price { font-size: 21px; }
+  .card-desc { margin-top: 6px; }
+
+  /* Menu section on mobile: search full width, wrapping pills, single column. */
+  .products-dark { padding: 72px 0 72px; }
+  .menu-search { margin-top: 28px; height: 52px; }
+  .menu-filters { gap: 10px; margin: 20px auto 28px; }
+  .menu-filter { font-size: 14px; padding: 10px 18px; }
+  .menu-grid { grid-template-columns: 1fr; gap: 20px; max-width: 460px; margin-inline: auto; }
+  /* Products page: give the wrapped sticky filter band room on small screens. */
+  .products-page .menu-filters { top: 108px; }
+}
+
+@media (min-width: 561px) and (max-width: 980px) {
+  .menu-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ========================================================================

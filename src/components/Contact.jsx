@@ -60,7 +60,7 @@ export default function Contact() {
             <div className="ci-row">
               <div className="ci-icon">{Icon.pin}</div>
               <div>
-                <h4>Branch 1</h4>
+                <h4>Outlet 1</h4>
                 <p>Rose Cottage, Ooty Main Road<br />Kotagiri, Tamil Nadu</p>
                 <p><a href="tel:+916382102558">+91 63821 02558</a></p>
               </div>
@@ -69,7 +69,7 @@ export default function Contact() {
             <div className="ci-row">
               <div className="ci-icon">{Icon.pin}</div>
               <div>
-                <h4>Branch 2</h4>
+                <h4>Outlet 2</h4>
                 <p>Market Road, near old police station<br />Kotagiri, Tamil Nadu</p>
                 <p><a href="tel:+919843800369">+91 98438 00369</a></p>
               </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { supabase } from '../lib/supabase.js'
+import { supabase, PRODUCTS_TABLE } from '../lib/supabase.js'
 
 // Add / edit form shown in a modal. Handles image upload to Supabase Storage
 // and insert/update of the product row.
@@ -71,8 +71,8 @@ export default function ProductForm({ product, categories, bucket, onClose, onSa
     }
 
     const query = isNew
-      ? supabase.from('products').insert(payload)
-      : supabase.from('products').update(payload).eq('id', product.id)
+      ? supabase.from(PRODUCTS_TABLE).insert(payload)
+      : supabase.from(PRODUCTS_TABLE).update(payload).eq('id', product.id)
 
     const { error } = await query
     setSaving(false)

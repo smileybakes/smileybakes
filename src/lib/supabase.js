@@ -15,3 +15,8 @@ export const isConfigured = Boolean(url && anonKey)
 export const supabase = isConfigured ? createClient(url, anonKey) : null
 
 export const PRODUCT_IMAGE_BUCKET = 'product-images'
+
+// Table the site reads/writes its product catalog from. Switched to the new
+// `latest_products` collection (see supabase/migrations/004_latest_products.sql),
+// which holds the catalog under the current category scheme.
+export const PRODUCTS_TABLE = 'latest_products'

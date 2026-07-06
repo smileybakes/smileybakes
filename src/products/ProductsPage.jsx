@@ -8,12 +8,13 @@ import {
   PLACEHOLDER,
   formatPrice,
 } from '../data/products.js'
-import { supabase, isConfigured } from '../lib/supabase.js'
+import { supabase, isConfigured, PRODUCTS_TABLE } from '../lib/supabase.js'
 
 // Full product catalogue shown as a clean card grid (no carousel), with the
 // same category filters as the homepage section. Lives at /products.
 export default function ProductsPage() {
   const [active, setActive] = useState('All')
+  const [query, setQuery] = useState('')
 
   // Live products from Supabase, falling back to the bundled static list if
   // Supabase isn't configured or the fetch fails — the page always shows items.
@@ -23,7 +24,7 @@ export default function ProductsPage() {
     if (!isConfigured) return
     let cancelled = false
     supabase
-      .from('products')
+      .from(PRODUCTS_TABLE)
       .select('*')
       .eq('status', 'active')
       .order('sort_order', { ascending: true })
@@ -57,16 +58,23 @@ export default function ProductsPage() {
     if (active !== 'All' && !CATEGORIES.includes(active)) setActive('All')
   }, [CATEGORIES, active])
 
-  const items =
-    active === 'All'
-      ? products
-      : products.filter((p) => p.category === active)
+  const items = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return products.filter((p) => {
+      const inCat = active === 'All' || p.category === active
+      const inQuery =
+        !q ||
+        p.name.toLowerCase().includes(q) ||
+        (p.category && p.category.toLowerCase().includes(q))
+      return inCat && inQuery
+    })
+  }, [products, active, query])
 
   return (
     <>
       <Navbar />
       <main>
-        <section className="products products-page" id="products">
+        <section className="products products-dark products-page" id="products">
           <div className="container">
             <motion.div
               className="products-head"
@@ -74,9 +82,9 @@ export default function ProductsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-              <span className="eyebrow centered">Our Full Menu</span>
-              <h1 className="section-title">
-                All <span className="accent">Products</span>
+              <span className="eyebrow centered gold-only">Our Full Menu</span>
+              <h1 className="section-title light">
+                All <span className="accent-gold">Products</span>
               </h1>
               <p>
                 Freshly baked cakes, Ooty-special bakery items, homemade
@@ -85,35 +93,57 @@ export default function ProductsPage() {
               </p>
             </motion.div>
 
-            <div className="filters">
+            {/* ---- Search (sticky band; only the search floats) ---- */}
+            <div className="menu-search-bar">
+              <div className="menu-search">
+                <SearchGlyph />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search the menu…"
+                  aria-label="Search the menu"
+                />
+              </div>
+            </div>
+
+            {/* ---- Category filter pills ---- */}
+            <div className="menu-filters">
               {CATEGORIES.map((c) => (
                 <button
                   key={c}
-                  className={`filter ${active === c ? 'active' : ''}`}
+                  className={`menu-filter ${active === c ? 'active' : ''}`}
                   onClick={() => setActive(c)}
+                  aria-pressed={active === c}
                 >
-                  <span>{c}</span>
-                  {active === c && (
-                    <motion.span
-                      layoutId="filter-active-page"
-                      className="filter-pill"
-                      transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-                    />
-                  )}
+                  {c}
                 </button>
               ))}
             </div>
 
-            <div className="product-grid">
-              {items.map((p, i) => (
-                <ProductCard key={p.id} p={p} index={i} />
-              ))}
-            </div>
+            {items.length ? (
+              <div className="menu-grid">
+                {items.map((p, i) => (
+                  <ProductCard key={p.id} p={p} index={i} />
+                ))}
+              </div>
+            ) : (
+              <p className="menu-empty">No items match your search.</p>
+            )}
           </div>
         </section>
       </main>
       <Footer />
     </>
+  )
+}
+
+function SearchGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>
   )
 }
 
@@ -123,12 +153,12 @@ function ProductCard({ p, index = 0 }) {
       className="card"
       whileHover={{ y: -6 }}
       initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut', delay: (index % 8) * 0.05 }}
     >
       <div className="card-media">
-        {p.badge && <span className="badge">{p.badge}</span>}
+        {p.badge && <span className="badge badge-left">{p.badge}</span>}
+        {p.category && <span className="badge badge-right">{p.category}</span>}
         <motion.img
           ref={(el) => {
             if (el && el.complete && el.naturalWidth > 0) el.classList.add('loaded')
@@ -147,10 +177,11 @@ function ProductCard({ p, index = 0 }) {
         />
       </div>
       <div className="card-body">
-        <div className="card-cat">{p.category}</div>
-        <h3 className="card-title">{p.name}</h3>
+        <div className="card-head">
+          <h3 className="card-title">{p.name}</h3>
+          {formatPrice(p) && <div className="card-price">{formatPrice(p)}</div>}
+        </div>
         {p.desc && <p className="card-desc">{p.desc}</p>}
-        {formatPrice(p) && <div className="card-price">{formatPrice(p)}</div>}
       </div>
     </motion.article>
   )

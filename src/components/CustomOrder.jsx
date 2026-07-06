@@ -7,10 +7,19 @@ const STEPS = [
   { n: '04', title: 'Pickup or Delivery', desc: 'Collect from our shop or get it delivered to your doorstep' },
 ]
 
-const VARIANTS = [
-  'Sweet Varkey', 'Salt Varkey', 'Masala Varkey', 'Ghee Varkey',
-  'Butter Cookies', 'Coconut Cookies', 'Jeera Cookies', 'Chocolate Cookies', 'Nankhatai',
-]
+// Categories → their selectable products. Choosing a category reveals its products.
+// Nilgiri Oils groups the base oils, essential oils, and roll-ons together.
+const CATEGORIES = {
+  Varkey: ['Normal Varkey', 'Ghee Varkey', 'Brown Sugar Varkey', 'Masala Varkey'],
+  Cookies: ['Salt', 'Sweet', 'Peanut'],
+  'Nilgiri Oils': [
+    'Eucalyptus Oil', 'Joint Pain Oil', 'Body Pain Oil', 'Lemon Grass Oil', 'Citronella Oil',
+    'Rosemary (Essential)', 'Tea Tree (Essential)', 'Lavender (Essential)',
+    'Peppermint (Essential)', 'Sandalwood (Essential)', 'Clove (Essential)',
+    'Eucalyptus Roll-on', 'Migraine Roll-on',
+  ],
+  'Tea Powder': ['Tea Powder'],
+}
 
 // WhatsApp number in international format (no +, spaces or dashes). 91 = India.
 const WHATSAPP_NUMBER = '916382102558'
@@ -20,10 +29,8 @@ const INITIAL_FORM = {
   phone: '',
   email: '',
   productType: '',
-  requiredDate: '',
   quantity: '',
   unit: '',
-  purpose: '',
   deliveryMethod: '',
   deliveryAddress: '',
   instructions: '',
@@ -34,6 +41,14 @@ export default function CustomOrder() {
   const [form, setForm] = useState(INITIAL_FORM)
 
   const update = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+
+  // When the category changes, reset the selected products (they belong to the old category).
+  const onCategoryChange = (e) => {
+    setForm((prev) => ({ ...prev, productType: e.target.value }))
+    setVariants([])
+  }
+
+  const products = CATEGORIES[form.productType] || []
 
   const toggle = (f) =>
     setVariants((prev) => (prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]))
@@ -46,13 +61,10 @@ export default function CustomOrder() {
       `*Phone:* ${form.phone}`,
       `*Email:* ${form.email}`,
       '',
-      `*Product Type:* ${form.productType}`,
-      `*Variants:* ${variants.length ? variants.join(', ') : '—'}`,
+      `*Category:* ${form.productType}`,
+      `*Products:* ${variants.length ? variants.join(', ') : '—'}`,
       `*Quantity:* ${form.quantity} ${form.unit}`,
-      `*Required Date:* ${form.requiredDate}`,
     ]
-
-    if (form.purpose) lines.push(`*Purpose:* ${form.purpose}`)
 
     lines.push('', `*Delivery Method:* ${form.deliveryMethod}`)
     if (form.deliveryMethod === 'Delivery' && form.deliveryAddress) {
@@ -133,36 +145,34 @@ export default function CustomOrder() {
             <input type="email" name="email" value={form.email} onChange={update} placeholder="jane@email.com" required />
           </div>
 
-          <div className="field-row">
-            <div className="field">
-              <label>Product Type *</label>
-              <select name="productType" value={form.productType} onChange={update} required>
-                <option value="" disabled>Select…</option>
-                <option>Varkey</option>
-                <option>Cookies</option>
-                <option>Both</option>
-              </select>
-            </div>
-            <div className="field">
-              <label>Required Date *</label>
-              <input type="date" name="requiredDate" value={form.requiredDate} onChange={update} required />
-            </div>
+          <div className="field">
+            <label>Category *</label>
+            <select name="productType" value={form.productType} onChange={onCategoryChange} required>
+              <option value="" disabled>Select…</option>
+              {Object.keys(CATEGORIES).map((c) => (
+                <option key={c}>{c}</option>
+              ))}
+            </select>
           </div>
 
           <div className="field">
-            <label>Product Variants *</label>
-            <div className="flavor-pills">
-              {VARIANTS.map((f) => (
-                <button
-                  type="button"
-                  key={f}
-                  className={`pill ${variants.includes(f) ? 'active' : ''}`}
-                  onClick={() => toggle(f)}
-                >
-                  {f}
-                </button>
-              ))}
-            </div>
+            <label>Products *</label>
+            {products.length ? (
+              <div className="flavor-pills">
+                {products.map((f) => (
+                  <button
+                    type="button"
+                    key={f}
+                    className={`pill ${variants.includes(f) ? 'active' : ''}`}
+                    onClick={() => toggle(f)}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="pills-hint">Select a category above to see its products.</p>
+            )}
           </div>
 
           <div className="field-row">
@@ -179,19 +189,6 @@ export default function CustomOrder() {
                 <option>Kg</option>
               </select>
             </div>
-          </div>
-
-          <div className="field">
-            <label>Purpose of Order</label>
-            <select name="purpose" value={form.purpose} onChange={update}>
-              <option value="" disabled>Select…</option>
-              <option>Birthday</option>
-              <option>Wedding</option>
-              <option>Corporate</option>
-              <option>Festival</option>
-              <option>Party</option>
-              <option>Other</option>
-            </select>
           </div>
 
           <div className="field">

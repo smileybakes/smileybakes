@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { supabase, PRODUCT_IMAGE_BUCKET } from '../lib/supabase.js'
+import { supabase, PRODUCT_IMAGE_BUCKET, PRODUCTS_TABLE } from '../lib/supabase.js'
 import {
   CATEGORIES as STATIC_CATEGORIES,
   PLACEHOLDER,
@@ -24,7 +24,7 @@ export default function ProductManager({ session, tabProps }) {
     setLoading(true)
     setError('')
     const { data, error } = await supabase
-      .from('products')
+      .from(PRODUCTS_TABLE)
       .select('*')
       .order('sort_order', { ascending: true })
     setLoading(false)
@@ -62,7 +62,7 @@ export default function ProductManager({ session, tabProps }) {
       list.map((x) => (x.id === p.id ? { ...x, status: next } : x))
     )
     const { error } = await supabase
-      .from('products')
+      .from(PRODUCTS_TABLE)
       .update({ status: next })
       .eq('id', p.id)
     if (error) {
@@ -73,7 +73,7 @@ export default function ProductManager({ session, tabProps }) {
 
   async function remove(p) {
     if (!confirm(`Delete “${p.name}”? This can’t be undone.`)) return
-    const { error } = await supabase.from('products').delete().eq('id', p.id)
+    const { error } = await supabase.from(PRODUCTS_TABLE).delete().eq('id', p.id)
     if (error) setError(error.message)
     else setProducts((list) => list.filter((x) => x.id !== p.id))
   }
