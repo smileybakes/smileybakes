@@ -3,11 +3,11 @@ import { motion } from 'framer-motion'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import {
-  CATEGORIES as STATIC_CATEGORIES,
   PRODUCTS as STATIC_PRODUCTS,
   PLACEHOLDER,
   formatPrice,
 } from '../data/products.js'
+import { useCategories } from '../data/useCategories.js'
 import { supabase, isConfigured, PRODUCTS_TABLE } from '../lib/supabase.js'
 
 // Full product catalogue shown as a clean card grid (no carousel), with the
@@ -41,17 +41,10 @@ export default function ProductsPage() {
     }
   }, [])
 
-  // Build the category list from the products actually present, preserving the
-  // curated order and appending any new categories the admin introduced.
-  const CATEGORIES = useMemo(() => {
-    const present = new Set(products.map((p) => p.category))
-    const ordered = STATIC_CATEGORIES.filter(
-      (c) => c === 'All' || present.has(c)
-    )
-    const known = new Set(ordered)
-    for (const c of present) if (!known.has(c)) ordered.push(c)
-    return ordered
-  }, [products])
+  // Admin-managed categories, plus 'All' and any category a product uses that
+  // isn't in the table yet (so nothing becomes unreachable).
+  const managed = useCategories({ mergeFromProducts: products })
+  const CATEGORIES = useMemo(() => ['All', ...managed], [managed])
 
   // If the active filter's category disappears, fall back to 'All'.
   useEffect(() => {

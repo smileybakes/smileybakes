@@ -20,3 +20,7 @@ export const PRODUCT_IMAGE_BUCKET = 'product-images'
 // `latest_products` collection (see supabase/migrations/004_latest_products.sql),
 // which holds the catalog under the current category scheme.
 export const PRODUCTS_TABLE = 'latest_products'
+
+// Authoritative list of selectable categories, managed from the admin.
+// See supabase/migrations/005_categories.sql.
+export const CATEGORIES_TABLE = 'categories'

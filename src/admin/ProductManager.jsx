@@ -1,46 +1,51 @@
 import { useEffect, useMemo, useState } from 'react'
-import { supabase, PRODUCT_IMAGE_BUCKET, PRODUCTS_TABLE } from '../lib/supabase.js'
 import {
-  CATEGORIES as STATIC_CATEGORIES,
-  PLACEHOLDER,
-  formatPrice,
-} from '../data/products.js'
+  supabase,
+  PRODUCT_IMAGE_BUCKET,
+  PRODUCTS_TABLE,
+  CATEGORIES_TABLE,
+} from '../lib/supabase.js'
+import { PLACEHOLDER, formatPrice } from '../data/products.js'
 import ProductForm from './ProductForm.jsx'
+import CategoryManager from './CategoryManager.jsx'
 import { AdminTabs } from './Admin.jsx'
-
-// Known categories (minus the synthetic 'All') seed the category dropdown; the
-// admin can still type a new one in the form.
-const SEED_CATEGORIES = STATIC_CATEGORIES.filter((c) => c !== 'All')
 
 export default function ProductManager({ session, tabProps }) {
   const [products, setProducts] = useState([])
+  const [dbCategories, setDbCategories] = useState([]) // rows from categories table
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [editing, setEditing] = useState(null) // product object, {} for new, or null
+  const [managingCats, setManagingCats] = useState(false)
   const [filter, setFilter] = useState('All')
   const [search, setSearch] = useState('')
 
   async function load() {
     setLoading(true)
     setError('')
-    const { data, error } = await supabase
-      .from(PRODUCTS_TABLE)
-      .select('*')
-      .order('sort_order', { ascending: true })
+    const [prodRes, catRes] = await Promise.all([
+      supabase.from(PRODUCTS_TABLE).select('*').order('sort_order', { ascending: true }),
+      supabase.from(CATEGORIES_TABLE).select('*').order('sort_order', { ascending: true }),
+    ])
     setLoading(false)
-    if (error) setError(error.message)
-    else setProducts(data ?? [])
+    if (prodRes.error) setError(prodRes.error.message)
+    else setProducts(prodRes.data ?? [])
+    // Categories are non-fatal: fall back to product-derived list on error.
+    if (catRes.error) console.error('Failed to load categories:', catRes.error.message)
+    else setDbCategories(catRes.data ?? [])
   }
 
   useEffect(() => {
     load()
   }, [])
 
+  // Selectable categories: the managed table list, plus any category a product
+  // uses that isn't in the table yet (so existing products stay editable).
   const categories = useMemo(() => {
-    const set = new Set(SEED_CATEGORIES)
-    products.forEach((p) => set.add(p.category))
+    const set = new Set(dbCategories.map((c) => c.name))
+    products.forEach((p) => { if (p.category) set.add(p.category) })
     return Array.from(set)
-  }, [products])
+  }, [dbCategories, products])
 
   // Apply category filter, then the free-text search (name or category).
   const visible = useMemo(() => {
@@ -93,6 +98,9 @@ export default function ProductManager({ session, tabProps }) {
           </div>
           {tabProps && <AdminTabs {...tabProps} />}
           <div className="app-header-actions">
+            <button className="btn-ghost" onClick={() => setManagingCats(true)}>
+              Manage categories
+            </button>
             <button className="btn-primary" onClick={() => setEditing({})}>
               + Add product
             </button>
@@ -219,6 +227,15 @@ export default function ProductManager({ session, tabProps }) {
             setEditing(null)
             load()
           }}
+        />
+      )}
+
+      {managingCats && (
+        <CategoryManager
+          categories={dbCategories}
+          products={products}
+          onClose={() => setManagingCats(false)}
+          onChanged={load}
         />
       )}
     </div>

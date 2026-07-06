@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { supabase, PRODUCTS_TABLE } from '../lib/supabase.js'
+import { supabase, PRODUCTS_TABLE, CATEGORIES_TABLE } from '../lib/supabase.js'
 
 // Add / edit form shown in a modal. Handles image upload to Supabase Storage
 // and insert/update of the product row.
@@ -75,9 +75,26 @@ export default function ProductForm({ product, categories, bucket, onClose, onSa
       : supabase.from(PRODUCTS_TABLE).update(payload).eq('id', product.id)
 
     const { error } = await query
+    if (error) {
+      setSaving(false)
+      setError(error.message)
+      return
+    }
+
+    // If the admin typed a brand-new category, register it in the categories
+    // table so it shows up in the site filters and category manager. Ignore a
+    // duplicate-key error (category already exists) — that's fine.
+    if (newCategory.trim()) {
+      const { error: catErr } = await supabase
+        .from(CATEGORIES_TABLE)
+        .insert({ name: finalCategory })
+      if (catErr && !/duplicate|unique/i.test(catErr.message)) {
+        console.error('Could not register new category:', catErr.message)
+      }
+    }
+
     setSaving(false)
-    if (error) setError(error.message)
-    else onSaved()
+    onSaved()
   }
 
   return (
