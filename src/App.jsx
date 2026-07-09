@@ -9,6 +9,7 @@ import CustomOrder from './components/CustomOrder.jsx'
 import Testimonials from './components/Testimonials.jsx'
 import Contact from './components/Contact.jsx'
 import Footer from './components/Footer.jsx'
+import FloatingActions from './components/FloatingActions.jsx'
 
 // Scroll to the URL hash target (e.g. #contact) after arriving on the homepage.
 // Needed because sections load async content (products/reviews from Supabase)
@@ -49,6 +50,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <FloatingActions />
     </>
   )
 }

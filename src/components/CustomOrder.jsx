@@ -12,6 +12,10 @@ const STEPS = [
 const CATEGORIES = {
   Varkey: ['Normal Varkey', 'Ghee Varkey', 'Brown Sugar Varkey', 'Masala Varkey'],
   Cookies: ['Salt', 'Sweet', 'Peanut'],
+  'Homemade Chocolate': [
+    'Assorted Homemade Chocolates', 'Milk Chocolate', 'Dark Chocolate',
+    'White Chocolate', 'Nut Chocolate', 'Fruit & Nut', 'Chocolate Gift Box',
+  ],
   'Nilgiri Oils': [
     'Eucalyptus Oil', 'Joint Pain Oil', 'Body Pain Oil', 'Lemon Grass Oil', 'Citronella Oil',
     'Rosemary (Essential)', 'Tea Tree (Essential)', 'Lavender (Essential)',
@@ -95,9 +99,9 @@ export default function CustomOrder() {
         <div className="custom-intro">
           <span className="eyebrow gold-line">Bulk Orders</span>
           <h2 className="section-title">
-            Varkey &amp; Cookies,
+            Varkey, Chocolates &amp; More,
             <br />
-            <span className="accent">Baked in Bulk</span>
+            <span className="accent">Made in Bulk</span>
           </h2>
           {/* <p className="custom-lead">
             Hosting an event or stocking up for a celebration? Order our crisp

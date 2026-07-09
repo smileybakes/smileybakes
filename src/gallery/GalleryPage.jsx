@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
+import FloatingActions from '../components/FloatingActions.jsx'
 import { PLACEHOLDER } from '../data/products.js'
 import { GALLERY_PLACEHOLDERS } from '../data/gallery.js'
 import { supabase, isConfigured } from '../lib/supabase.js'
@@ -66,6 +67,7 @@ export default function GalleryPage() {
         </section>
       </main>
       <Footer />
+      <FloatingActions />
     </>
   )
 }

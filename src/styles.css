@@ -1358,8 +1358,57 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .ooty-hero-img { height: 240px; }
 }
 
+/* ---- Floating action buttons (call / WhatsApp / back-to-top) ---- */
+.fab-stack {
+  position: fixed;
+  right: 18px;
+  bottom: 22px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.fab {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(23, 20, 19, 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.25s ease;
+  text-decoration: none;
+}
+.fab svg { width: 26px; height: 26px; }
+.fab:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(23, 20, 19, 0.34); }
+.fab-top { background: var(--ink-soft); }
+.fab-call { background: var(--gold-deep); }
+.fab-whatsapp { background: #25d366; }
+
+/* Back-to-top hides until the page is scrolled */
+.fab-top {
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events: none;
+}
+.fab-top.is-visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+@media (max-width: 640px) {
+  .fab-stack { right: 14px; bottom: 16px; gap: 12px; }
+  .fab { width: 50px; height: 50px; }
+  .fab svg { width: 24px; height: 24px; }
+}
+
 /* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .ooty-fog, .ooty-blob, .ooty-leaf { animation: none !important; }
   .ooty-hero-img, .ooty-card-img { transition: none !important; }
+  .fab { transition: none; }
 }

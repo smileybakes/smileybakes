@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
+import FloatingActions from '../components/FloatingActions.jsx'
 import {
   PRODUCTS as STATIC_PRODUCTS,
   PLACEHOLDER,
@@ -127,6 +128,7 @@ export default function ProductsPage() {
         </section>
       </main>
       <Footer />
+      <FloatingActions />
     </>
   )
 }
